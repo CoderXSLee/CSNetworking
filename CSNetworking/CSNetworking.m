@@ -14,7 +14,7 @@
 #import "YYCache.h"
 
 // 1 == 线上环境  0 == 测试环境
-#if 0   // 线上环境
+#if 1   // 线上环境
 #define baseURLString @"http://192.168.1.253:8084/v2/"
 #else // 测试环境
 #define baseURLString @"http://httpbin.org/"
