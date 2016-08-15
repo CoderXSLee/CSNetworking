@@ -7,7 +7,6 @@
 //
 
 #import "CSAnalyzedResult.h"
-#import "CSTip.h"
 
 @implementation CSAnalyzedResult
 
