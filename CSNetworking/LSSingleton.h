@@ -1,5 +1,4 @@
 
-
 // .h文件
 #define sharedInstanceH + (instancetype)sharedInstance;
 
