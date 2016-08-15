@@ -42,8 +42,8 @@ NSString * const _kCSNoneNetworkString                =       @"无网络连接"
 // 网络状态码
 - (CSNetworkStatus)getNetworkStatus
 {
-    CSNetworkStatus networkStatu;
-    NetworkStatus status;
+    CSNetworkStatus networkStatu = CS_NETWORK_STATUS_NONE;
+    NetworkStatus status = NotReachable;
     status = self.reachabilityManager.currentReachabilityStatus;
     
     if (status == NotReachable) {
@@ -62,7 +62,7 @@ NSString * const _kCSNoneNetworkString                =       @"无网络连接"
 - (NSString *)getNetworkStatusDescription
 {
     NSString *des = @"";
-    NetworkStatus status;
+    NetworkStatus status = NotReachable;
     status = self.reachabilityManager.currentReachabilityStatus;
     if (status == NotReachable) {
         des = _kCSNoneNetworkString;
@@ -84,7 +84,7 @@ NSString * const _kCSNoneNetworkString                =       @"无网络连接"
     
     NetworkStatus status = currentReeach.currentReachabilityStatus;
     
-    CSNetworkStatus networkStatus;
+    CSNetworkStatus networkStatus = CS_NETWORK_STATUS_NONE;
     NSString *statusString  = nil;
     
     
