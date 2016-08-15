@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "CSNetworking/CSNetworking.h"
+#import "CSNetworking.h"
 
 @interface ViewController ()
 
