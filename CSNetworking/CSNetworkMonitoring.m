@@ -52,6 +52,8 @@ NSString * const _kCSNoneNetworkString                =       @"无网络连接"
         networkStatu = CS_NETWORK_STATUS_WWAN;
     }else if (status == ReachableViaWiFi){
         networkStatu = CS_NETWORK_STATUS_WiFi;
+    }else {
+        networkStatu = CS_NETWORK_STATUS_NONE;
     }
     return networkStatu;
 }
@@ -68,6 +70,8 @@ NSString * const _kCSNoneNetworkString                =       @"无网络连接"
         des = _kCSNetworkStringWWAN;
     }else if (status == ReachableViaWiFi){
         des = _kCSNetworkStringWiFi;
+    }else {
+        des = _kCSNoneNetworkString;
     }
     return des;
 }
