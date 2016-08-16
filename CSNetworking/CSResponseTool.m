@@ -177,7 +177,7 @@
     }
     
     decodeJson = [self deleteSpecialCodeWithStr:decodeJson];
-    NSLog(@"\n====== responseJson =======\n%@ \n===========================\n", decodeJson);
+    // NSLog(@"\n====== responseJson =======\n%@ \n===========================\n", decodeJson);
     // 字符串转成流
     NSData *data = [decodeJson dataUsingEncoding:NSUTF8StringEncoding];
     // 转换字典
