@@ -18,7 +18,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [CSNetworking GET:@"cache" networkBlock:^(CSCommonResult *result, id responseObject) {
+     NSString *userToken = @"123123123"; //[CSManager sharedInstance].userToken;
+    
+//     [[CSNetworking sharedInstance] setValue:userToken forHTTPHeaderField:@"userToken"];
+    
+    [[CSNetworking sharedInstance] setHeaderValue:userToken forKey:@"userToken"];
+    
+    [CSNetworking GET:@"cache" isCache:NO networkBlock:^(CSCommonResult *result, id responseObject) {
         [CSResponseTool analyzeDataWithResult:result response:responseObject modelClass:nil analyzedBlock:^(CSAnalyzedResult *result, id data) {
             if (result.resultCode == CS_RESULT_SUCCESS) {
                 NSLog(@"%@", data);

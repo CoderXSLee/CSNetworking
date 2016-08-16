@@ -36,6 +36,11 @@ networkBlock:(NetworkBlock)networkBlock;
 + (void)DELETE:(NSString *)urlString parameters:(NSDictionary *)parameters
   networkBlock:(NetworkBlock)networkBlock;
 
+- (void)setBaseURLString:(NSString *)urlString;
+- (void)setTimeoutInterval:(NSInteger)TimeoutInterval;
+- (void)setHeaderValue:(NSString *)value forKey:(NSString *)key;
+- (void)AcceptableContentTypes:(NSSet *)acceptableContentTypes;
+
 @end
 
 

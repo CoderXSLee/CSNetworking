@@ -13,20 +13,15 @@
 #import "AFNetworkActivityIndicatorManager.h"
 #import "YYCache.h"
 
-// 1 == 线上环境  0 == 测试环境
-#if 1   // 线上环境
-#define baseURLString @"http://192.168.1.253:8084/v2/"
-#else // 测试环境
-#define baseURLString @"http://httpbin.org/"
-#endif
-
 @interface CSNetworking ()
+
 @property (nonatomic, strong) AFHTTPSessionManager *sessionManager;
+
 @end
 
 @implementation CSNetworking
 
-static AFHTTPSessionManager *_sessionManager;
+static NSString *baseURLString;
 
 + (void)isCache:(BOOL)isCache url:(NSString *)url parame:(NSDictionary *)parame networkBlock:(NetworkBlock)networkBlock {
     if (isCache == NO) {
@@ -36,7 +31,7 @@ static AFHTTPSessionManager *_sessionManager;
     NSString *md5Key = [CSResponseTool getCacheKeyWithUrlString:url parameters:parame];
     
     /// 无网络显示缓存数据
-    [CSNetworking getCacheDataWithCacheKey:md5Key networkBlock:networkBlock];
+    [self getCacheDataWithCacheKey:md5Key networkBlock:networkBlock];
 }
 
 #pragma mark - Public Methods
@@ -44,7 +39,7 @@ static AFHTTPSessionManager *_sessionManager;
 + (void)GET:(NSString *)urlString isCache:(BOOL)isCache networkBlock:(NetworkBlock)networkBlock {
     
     // 判断网络状态 ，无网络有缓存则取缓存数据。
-    [self isCache:isCache url:urlString parame:nil networkBlock:networkBlock];
+    [CSNetworking isCache:isCache url:urlString parame:nil networkBlock:networkBlock];
     
     /// 不缓存，有网络才会来这里
     CSNetworking *networking = [CSNetworking sharedInstance];
@@ -67,7 +62,7 @@ static AFHTTPSessionManager *_sessionManager;
 /// 适用于 REST URI 例如: www.baidu.com/getUserAddressList/?userID=1207
 + (void)GET:(NSString *)urlString parameters:(NSDictionary *)parameters isCache:(BOOL)isCache networkBlock:(NetworkBlock)networkBlock {
     // 判断网络状态 ，无网络有缓存则取缓存数据。
-    [self isCache:isCache url:urlString parame:parameters networkBlock:networkBlock];
+    [CSNetworking isCache:isCache url:urlString parame:parameters networkBlock:networkBlock];
     
     /// 不缓存，有网络才会来这里
     CSNetworking *networking = [CSNetworking sharedInstance];
@@ -90,7 +85,7 @@ static AFHTTPSessionManager *_sessionManager;
 + (void)POST:(NSString *)urlString parameters:(NSDictionary *)parameters isCache:(BOOL)isCache networkBlock:(NetworkBlock)networkBlock {
     
     // 判断网络状态 ，无网络有缓存则取缓存数据。
-    [self isCache:isCache url:urlString parame:parameters networkBlock:networkBlock];
+    [CSNetworking isCache:isCache url:urlString parame:parameters networkBlock:networkBlock];
     
     /// 不缓存，有网络才会来这里
     CSNetworking *networking = [CSNetworking sharedInstance];
@@ -115,7 +110,7 @@ static AFHTTPSessionManager *_sessionManager;
 + (void)PUT:(NSString *)urlString parameters:(NSDictionary *)parameters isCache:(BOOL)isCache networkBlock:(NetworkBlock)networkBlock {
     
     // 判断网络状态 ，无网络有缓存则取缓存数据。
-    [self isCache:isCache url:urlString parame:parameters networkBlock:networkBlock];
+    [CSNetworking isCache:isCache url:urlString parame:parameters networkBlock:networkBlock];
     
     /// 不缓存，有网络才会来这里
     CSNetworking *networking = [CSNetworking sharedInstance];
@@ -207,23 +202,16 @@ static AFHTTPSessionManager *_sessionManager;
     [cache setObject:response forKey:md5Key];
 }
 
+
 #pragma mark - Getters And Setters 存取
 - (AFHTTPSessionManager *)sessionManager {
-    
-    // 奇葩！为啥后台非要把token放在 header 心里骂了一万遍
-    // 为了解决首次安装使用时获取到 userToken 后
-    // 在app没有销毁掉时，之后的请求时 header 中 userToken依然为空的情况
-    // 以及不想在每一种请求中都去判断、设置 header 中的 userToken
-    // 也不想暴露 _sessionManager 所以将userToken放在这里处理
-    // 顺便提一下、搞不懂，各种奇葩玩法 真奇葩！
-    // 还有 get 请求传参还这样玩 http://www.xxx.com/getUserAddress/10023 其中 10023 是uid
-    
-    // NSString *userToken = [CSManager sharedInstance].userToken;
-    // [_sessionManager.requestSerializer setValue:userToken forHTTPHeaderField:@"userToken"];
-    
     if (_sessionManager == nil) {
-        NSURL *baseURL = [NSURL URLWithString:baseURLString];
-        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:baseURL];
+        
+        _sessionManager = [AFHTTPSessionManager manager];
+        
+//        NSURL *baseURL = [NSURL URLWithString:baseURLString];
+//        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:baseURL];
+        
         // 设定请求超时 (若不设置 则 默认 60 秒)
         _sessionManager.requestSerializer.timeoutInterval = 30;
         // 安全策略
@@ -247,8 +235,22 @@ static AFHTTPSessionManager *_sessionManager;
     return _sessionManager;
 }
 
-@end
+- (void)setBaseURLString:(NSString *)urlString {
+    NSURL *baseURL = [NSURL URLWithString:baseURLString];
+    _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:baseURL];
+}
+- (void)setTimeoutInterval:(NSInteger)TimeoutInterval {
+    _sessionManager.requestSerializer.timeoutInterval = TimeoutInterval;
+}
+- (void)setHeaderValue:(NSString *)value forKey:(NSString *)key {
+    [_sessionManager.requestSerializer setValue:value forHTTPHeaderField:key];
+}
+- (void)AcceptableContentTypes:(NSSet *)acceptableContentTypes {
+    [_sessionManager.responseSerializer setAcceptableContentTypes:acceptableContentTypes];
+}
 
+
+@end
 
 /// 单例的实现
 @implementation CSNetworking (Singleton)
