@@ -28,25 +28,33 @@
 
 static AFHTTPSessionManager *_sessionManager;
 
-#pragma mark - Public Methods
-/// 适用于奇葩传参方式 例如: www.baidu.com/getUserAddressList/1207 (1207为UID)
-+ (void)GET:(NSString *)urlString networkBlock:(NetworkBlock)networkBlock {
-    
++ (void)isCache:(BOOL)isCache url:(NSString *)url parame:(NSDictionary *)parame networkBlock:(NetworkBlock)networkBlock {
+    if (isCache == NO) {
+        return;
+    }
     /// md5 url append parameters
-    NSString *md5Key = [CSResponseTool getCacheKeyWithUrlString:urlString parameters:nil];
+    NSString *md5Key = [CSResponseTool getCacheKeyWithUrlString:url parameters:parame];
     
     /// 无网络显示缓存数据
     [CSNetworking getCacheDataWithCacheKey:md5Key networkBlock:networkBlock];
+}
+
+#pragma mark - Public Methods
+/// 适用于奇葩传参方式 例如: www.baidu.com/getUserAddressList/1207 (1207为UID)
++ (void)GET:(NSString *)urlString isCache:(BOOL)isCache networkBlock:(NetworkBlock)networkBlock {
     
-    /// 有网络才会来这里
+    // 判断网络状态 ，无网络有缓存则取缓存数据。
+    [self isCache:isCache url:urlString parame:nil networkBlock:networkBlock];
+    
+    /// 不缓存，有网络才会来这里
     CSNetworking *networking = [CSNetworking sharedInstance];
     [networking.sessionManager GET:urlString parameters:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSLog(@"接口: %@%@ 以【GET】方式->请求成功!", baseURLString, urlString);
         [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
         
-        // 请求成功缓存数据
-        [CSNetworking cacheDataWithUrl:urlString response:responseObject];
+        // 请求成功判断是否进行缓存数据
+        [CSNetworking isCache:isCache cacheDataWithUrl:urlString response:responseObject];
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
@@ -57,22 +65,18 @@ static AFHTTPSessionManager *_sessionManager;
 }
 
 /// 适用于 REST URI 例如: www.baidu.com/getUserAddressList/?userID=1207
-+ (void)GET:(NSString *)urlString parameters:(NSDictionary *)parameters networkBlock:(NetworkBlock)networkBlock {
++ (void)GET:(NSString *)urlString parameters:(NSDictionary *)parameters isCache:(BOOL)isCache networkBlock:(NetworkBlock)networkBlock {
+    // 判断网络状态 ，无网络有缓存则取缓存数据。
+    [self isCache:isCache url:urlString parame:parameters networkBlock:networkBlock];
     
-    /// md5 url append parameters
-    NSString *md5Key = [CSResponseTool getCacheKeyWithUrlString:urlString parameters:parameters];
-    
-    /// 无网络显示缓存数据
-    [CSNetworking getCacheDataWithCacheKey:md5Key networkBlock:networkBlock];
-    
-    /// 有网络才会来这里
+    /// 不缓存，有网络才会来这里
     CSNetworking *networking = [CSNetworking sharedInstance];
     [networking.sessionManager GET:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSLog(@"接口: %@%@ 以【GET URI】方式->请求成功!", baseURLString, urlString);
         [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
-        // 请求成功缓存数据
-        [CSNetworking cacheDataWithUrl:urlString response:responseObject];
+        // 请求成功判断是否进行缓存数据
+        [CSNetworking isCache:isCache cacheDataWithUrl:urlString response:responseObject];
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
@@ -83,22 +87,20 @@ static AFHTTPSessionManager *_sessionManager;
 }
 
 /// POST 请求
-+ (void)POST:(NSString *)urlString parameters:(NSDictionary *)parameters networkBlock:(NetworkBlock)networkBlock {
++ (void)POST:(NSString *)urlString parameters:(NSDictionary *)parameters isCache:(BOOL)isCache networkBlock:(NetworkBlock)networkBlock {
     
-    /// md5 url append parameters
-    NSString *md5Key = [CSResponseTool getCacheKeyWithUrlString:urlString parameters:parameters];
+    // 判断网络状态 ，无网络有缓存则取缓存数据。
+    [self isCache:isCache url:urlString parame:parameters networkBlock:networkBlock];
     
-    /// 无网络显示缓存数据
-    [CSNetworking getCacheDataWithCacheKey:md5Key networkBlock:networkBlock];
-    
+    /// 不缓存，有网络才会来这里
     CSNetworking *networking = [CSNetworking sharedInstance];
     [networking.sessionManager POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSLog(@"接口: %@%@ 以【POST】方式->请求成功!", baseURLString, urlString);
         [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
         
-        // 请求成功缓存数据
-        [CSNetworking cacheDataWithUrl:urlString response:responseObject];
+        // 请求成功判断是否进行缓存数据
+        [CSNetworking isCache:isCache cacheDataWithUrl:urlString response:responseObject];
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
@@ -110,22 +112,20 @@ static AFHTTPSessionManager *_sessionManager;
 }
 
 /// PUT 请求
-+ (void)PUT:(NSString *)urlString parameters:(NSDictionary *)parameters networkBlock:(NetworkBlock)networkBlock {
++ (void)PUT:(NSString *)urlString parameters:(NSDictionary *)parameters isCache:(BOOL)isCache networkBlock:(NetworkBlock)networkBlock {
     
-    /// md5 url append parameters
-    NSString *md5Key = [CSResponseTool getCacheKeyWithUrlString:urlString parameters:parameters];
-
-    /// 无网络显示缓存数据
-    [CSNetworking getCacheDataWithCacheKey:md5Key networkBlock:networkBlock];
+    // 判断网络状态 ，无网络有缓存则取缓存数据。
+    [self isCache:isCache url:urlString parame:parameters networkBlock:networkBlock];
     
+    /// 不缓存，有网络才会来这里
     CSNetworking *networking = [CSNetworking sharedInstance];
     [networking.sessionManager PUT:urlString parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSLog(@"接口: %@%@【PUT】方式->请求成功!", baseURLString, urlString);
         [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
         
-        // 请求成功缓存数据
-        [CSNetworking cacheDataWithUrl:urlString response:responseObject];
+        // 请求成功判断是否进行缓存数据
+        [CSNetworking isCache:isCache cacheDataWithUrl:urlString response:responseObject];
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
@@ -193,7 +193,12 @@ static AFHTTPSessionManager *_sessionManager;
 }
 
 /// 统一的数据缓存处理
-+ (void)cacheDataWithUrl:(NSString *)urlString response:(id)response {
++ (void)isCache:(BOOL)isCache cacheDataWithUrl:(NSString *)urlString response:(id)response {
+    
+    if (isCache == NO) {
+        return;
+    }
+    
     // 设置 YYCache 属性
     YYCache *cache = [[YYCache alloc] initWithName:@"networkCache"];
     cache.memoryCache.shouldRemoveAllObjectsOnMemoryWarning = YES;
