@@ -19,7 +19,6 @@
  *  @return 结果对象
  */
 + (instancetype)resultWithResponse:(id)response;
-+ (instancetype)resultWithResponse22222222:(id)response;
 
 /**
  *  判断指定结果码是否面向用户

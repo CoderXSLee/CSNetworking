@@ -27,28 +27,6 @@
         else if (code == 250) {
             analyzedResult.resultCode = CS_RESULT_EMPTY;
             analyzedResult.resultDesc = [msg isEqualToString:@""] ? msg : @"请求成功,数据为空";
-        }
-    }
-    return analyzedResult;
-}
-
-
-// 一般情况请忽略此方法...因为后台奇葩~
-// 如果http请求成功，参数错误、或者数据为空，后台是以 http code = 400 时返回的 json 需要用到此方法
-// code 是服务器给的
-+ (instancetype)resultWithResponse22222222:(id)response {
-    CSAnalyzedResult *analyzedResult = [[self alloc] init];
-    if (response != nil && response != [NSNull null] && [response isKindOfClass:[NSDictionary class]]) {
-        NSInteger code = [[response valueForKey:@"code"] integerValue];
-        // NSString *msg = [[response objectForKey:@"msg"] stringValue];
-        // serviceResult.timestamp = [response dateForKey:@"timestamp"];
-        /// 关键结果码手动映射
-        if (code == 200) {
-            analyzedResult.resultCode = CS_RESULT_SUCCESS;
-            analyzedResult.resultDesc = @"请求成功";
-        }else if (code == 250) {
-            analyzedResult.resultCode = CS_RESULT_EMPTY;
-            analyzedResult.resultDesc = @"请求成功,数据为空";
         }else {
             analyzedResult.resultCode = code ? code : 0;
             analyzedResult.resultDesc = @"未知的code";

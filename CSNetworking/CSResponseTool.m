@@ -27,7 +27,7 @@
         data = [CSResponseTool requestDispose:response];
         
         // 处理业务层的结果码
-        analyzeResult = [CSAnalyzedResult resultWithResponse:response];
+        analyzeResult = [CSAnalyzedResult resultWithResponse:data];
         
         @try {
             if (data != nil && data != [NSNull null] && [data isKindOfClass:[NSDictionary class]]) {

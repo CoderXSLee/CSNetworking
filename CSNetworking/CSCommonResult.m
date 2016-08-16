@@ -41,13 +41,15 @@
     return NO;
 }
 
+// 请求失败的错误结果码信息 http bad request code = 400 时 解析 error
 + (instancetype)resultWithResponse:(id)response
 {
     // TODO
     CSCommonResult *commonResult = [[self alloc] init];
     if (response != nil && response != [NSNull null] && [response isKindOfClass:[NSDictionary class]]) {
         commonResult.resultCode = [response[@"code"] integerValue];
-        commonResult.resultDesc = response[@"msg"];
+        // commonResult.resultDesc = response[@"msg"];
+        commonResult.resultDesc = response[@"error"];
     }
     return commonResult;
 }
