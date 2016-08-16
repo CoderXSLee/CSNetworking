@@ -72,13 +72,13 @@
                 resultDesc = result.resultDesc;
             }else if (error.code == NSURLErrorNotConnectedToInternet ) {
                 resultDesc = @"无网络连接";
-                resultCode = CS_RESULT_FAILURE;
+                resultCode = CSNetworkError;
             }else if (error.code == NSURLErrorUnknown){
                 resultDesc = @"请求失败";
-                resultCode = CS_RESULT_FAILURE;
+                resultCode = CSNetworkError;
             }else {
                 resultDesc = @"请求失败";
-                resultCode = CS_RESULT_FAILURE;
+                resultCode = CSNetworkError;
             }
         }
         // 统一处理结果码以及描述
@@ -92,7 +92,7 @@
     // 无网络显示缓存的处理 (这里代码并不完全通用，只用在本项目)
     // 有网络时获取最新数据，展示数据，然后磁盘缓存
     // 缓存的数据只在无网络时使用 ------ 开始
-    if (result.resultCode == CSNetworkError && response != nil) {
+    if ((result.resultCode == CSNetworkError || result.resultCode == CS_RESULT_FAILURE) && [response isKindOfClass:[NSData class]]) {
         // Json -> Dictionary
         data = [CSResponseTool requestDispose:response];
         analyzeResult = [CSAnalyzedResult resultWithCode:CSNetworkError description:@"网络连接失败"];

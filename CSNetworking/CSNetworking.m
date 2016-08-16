@@ -178,11 +178,6 @@ static NSString *baseURLString;
             CSCommonResult *result = [CSCommonResult resultWithCode:CSNetworkError description:nil];
             if (networkBlock) { networkBlock(result, cacheData); }
             return;
-        }else {
-            CSCommonResult *result = [CSCommonResult resultWithCode:CSNetworkError description:nil];
-            NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:NSURLErrorUnknown userInfo:nil];
-            if (networkBlock) { networkBlock(result, error); }
-            return;
         }
     }
 }
