@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger, CSResultCode) {
     /// 请求失败
     CS_RESULT_FAILURE = 400,
     /// 网络出现错误
-    CSNetworkError = -100,
+    CSNetworkError = 100,
 //    /// 网络连接超时
 //    CSNetworkTimedOut = -1,
 //    /// URL无效

@@ -67,9 +67,9 @@
                 resultDesc = @"无效的URL";
                 resultCode = CS_RESULT_FAILURE;
             }else if (error.code == NSURLErrorBadServerResponse) {
-                CSCommonResult *result = [CSResponseTool requestError:response];
-                resultCode = result.resultCode;
-                resultDesc = result.resultDesc;
+                CSCommonResult *commonResult = [CSResponseTool requestError:response];
+                resultCode = commonResult.resultCode;
+                resultDesc = commonResult.resultDesc;
             }else if (error.code == NSURLErrorNotConnectedToInternet ) {
                 resultDesc = @"无网络连接";
                 resultCode = CSNetworkError;
