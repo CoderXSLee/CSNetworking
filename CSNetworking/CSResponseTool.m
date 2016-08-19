@@ -76,9 +76,12 @@
             }else if (error.code == NSURLErrorUnknown){
                 resultDesc = @"请求失败";
                 resultCode = CSNetworkError;
-            }else {
+            }else if(error.code == NSURLErrorNetworkConnectionLost) {
                 resultDesc = @"请求失败";
                 resultCode = CSNetworkError;
+            }else {
+                resultDesc = @"请求失败";
+                resultCode = error.code;
             }
         }
         // 统一处理结果码以及描述
