@@ -13,7 +13,7 @@ pod 'CSNetworking', '~> 1.0.0'
     
     
 ## MVC 的使用方法 
-Request
+Request.m
 ```
 #pragma mark - 获取城市列表
 + (void)getUserAddressListWithUserID:(NSInteger)userID resultBlock:(RequestResponse)resultBlock {
@@ -29,7 +29,7 @@ Request
 @end
 ```
 
-ViewController
+ViewController.m
 ```
 - (void)requestUserAddressList {
     [CSMineRequest getUserAddressListWithUserID:1228 resultBlock:^(CSAnalyzedResult * result, id object) {
@@ -62,6 +62,89 @@ ViewController
     
     
 ## RAC + MVVM 中的使用方法
+
+ViewController.m
+```
+    // 初始化视图
+    UITableView *tableView = [[UITableView alloc] init];
+    tableView.frame = self.view.bounds;
+    tableView.dataSource = self.viewModel;
+    tableView.delegate = self;
+    self.viewModel.tableView = tableView;
+    [self.view addSubview:tableView];
+
+    // 执行视图命令
+    [self.viewModel.addressRequest execute:nil];
+```
+     
+     
+ViewModel.h
+```
+@interface HomeViewModel : NSObject<UITableViewDataSource>
+
+// 地址列表的请求
+@property (nonatomic, strong, readonly) RACCommand *addressRequest;
+
+// 地址列表数组
+@property (nonatomic, strong) NSMutableArray<AddressModel *> *addressArr;
+
+// 控制器中的 tableView
+@property (nonatomic, strong) UITableView *tableView;
+
+@end
+```
+     
+ViewModel.m
+```
+- (instancetype)init {
+    if (self = [super init]) {
+        [self setupCommand];
+    }
+    return self;
+}
+
+- (void)setupCommand {
+    _addressRequest = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+        RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [CSNetworking GET:@"app/city/cityList" parameters:nil networkBlock:^(CSCommonResult *result, id responseObject) {
+                [CSResponseTool analyzeDataWithResult:result response:responseObject modelClass:[AddressModel class]  analyzedBlock:^(CSAnalyzedResult *result, id data) {
+                    if (result.resultCode == CS_RESULT_SUCCESS) {
+                            [subscriber sendNext:data];
+                            [subscriber sendCompleted];
+                    }
+                    if (!data) {
+                        // [self.tableView showNoData];
+                    }else if (networkError) {
+                        // [self.tableView showNetworkError];
+                    }
+                }];
+            }];
+            return nil;
+        }];
+        return signal;
+    }];
+    
+    [_addressRequest.executionSignals.switchToLatest subscribeNext:^(id x) {
+        _addressArr = x;
+        [self.tableView reloadData];
+    }];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.addressArr.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *ID = @"cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+    }
+    AddressModel *model = self.addressArr[indexPath.row];
+    cell.textLabel.text = model.name;
+    return cell;
+}
+```
 
     
      
