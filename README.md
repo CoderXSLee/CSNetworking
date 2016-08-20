@@ -13,7 +13,7 @@ pod 'CSNetworking', '~> 1.0.0'
     
     
 ## MVC 的使用方法 
-Request.m
+Request
 ```
 #pragma mark - 获取城市列表
 + (void)getUserAddressListWithUserID:(NSInteger)userID resultBlock:(RequestResponse)resultBlock {
@@ -29,7 +29,7 @@ Request.m
 @end
 ```
 
-ViewController.m
+ViewController
 ```
 - (void)requestUserAddressList {
     [CSMineRequest getUserAddressListWithUserID:1228 resultBlock:^(CSAnalyzedResult * result, id object) {
@@ -62,38 +62,28 @@ ViewController.m
     
     
 ## RAC + MVVM 中的使用方法
-
-ViewController.m
+Controller.m
 ```
-    // 初始化视图
+- (void)viewDidLoad {
+    // 初始化试图
     UITableView *tableView = [[UITableView alloc] init];
     tableView.frame = self.view.bounds;
     tableView.dataSource = self.viewModel;
     tableView.delegate = self;
     self.viewModel.tableView = tableView;
-    [self.view addSubview:tableView];
+    [self.view addsubView:tableView];
 
-    // 执行视图命令
+    // 执行试图命令
     [self.viewModel.addressRequest execute:nil];
+}
 ```
      
      
 ViewModel.h
 ```
-@interface HomeViewModel : NSObject<UITableViewDataSource>
 
-// 地址列表的请求
-@property (nonatomic, strong, readonly) RACCommand *addressRequest;
-
-// 地址列表数组
-@property (nonatomic, strong) NSMutableArray<AddressModel *> *addressArr;
-
-// 控制器中的 tableView
-@property (nonatomic, strong) UITableView *tableView;
-
-@end
 ```
-     
+
 ViewModel.m
 ```
 - (instancetype)init {
@@ -145,14 +135,6 @@ ViewModel.m
     return cell;
 }
 ```
-
-    
-     
-      
-       
-        
-        
-
 
 ## 详情请查看 Demo
 
