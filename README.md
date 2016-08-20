@@ -12,7 +12,7 @@ Request
 #pragma mark - 获取城市列表
 + (void)getUserAddressListWithUserID:(NSInteger)userID resultBlock:(RequestResponse)resultBlock {
     NSDictionary *parame = @{@"uid" : [NSString stringWithFormat:@"%ld", userID]};
-    [CSNetworking GET:@"get" parameters:parame networkBlock:^(CSCommonResult * _Nullable result, id  _Nullable responseObject) {
+    [CSNetworking GET:@"get" parameters:parame networkBlock:^(CSCommonResult * result, id responseObject) {
         // 返回的 data 是一个数组，里面是 CSAddressModel
         [CSResponseTool analyzeDataWithResult:result response:responseObject modelClass:[CSAddressModel class] analyzedBlock:^(CSAnalyzedResult * _Nullable result, id  _Nullable data) {
             if (resultBlock) { resultBlock(result, data); }
@@ -26,7 +26,7 @@ Request
 ViewController
 ```
 - (void)requestUserAddressList {
-    [CSMineRequest getUserAddressListWithUserID:1228 resultBlock:^(CSAnalyzedResult * _Nullable result, id  _Nullable object) {
+    [CSMineRequest getUserAddressListWithUserID:1228 resultBlock:^(CSAnalyzedResult * result, id object) {
         if (result.resultCode == CS_RESULT_SUCCESS) {
             NSLog(@"%@", object);
             if (_page == 1) {
