@@ -81,7 +81,14 @@ Controller.m
      
 ViewModel.h
 ```
-
+@interface HomeViewModel : NSObject<UITableViewDataSource>
+/// 地址列表的请求
+@property (nonatomic, strong, redonly) RACCommand *addressRequest;
+/// 地址的模型数组
+@property (nonatomic, strong, redonly) NSMutableArray<AddressModel *> *addressArr;
+/// 控制器中的 tableView
+@property (nonatomic, strong) UITableView *tableView; 
+@end
 ```
 
 ViewModel.m
