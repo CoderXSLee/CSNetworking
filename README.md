@@ -1,12 +1,18 @@
 # CSNetworking
 基于 AFNetworking 的网络封装, 数据解析, 模型转换, 以及业务处理等集于一身。
-  
+    
+    
 ## 依赖项
 1. AFNetworking  
 2. MJExtension   (可删除可替换)
+   
 
+## CocoaPods 安装
+pod 'CSNetworking', '~> 1.0.0'
+  
+    
+    
 ## MVC 的使用方法 
-
 Request
 ```
 #pragma mark - 获取城市列表
@@ -52,9 +58,17 @@ ViewController
     }];
 }
 ```
+  
+    
+    
 ## RAC + MVVM 中的使用方法
 
-
+    
+     
+      
+       
+        
+        
 
 
 ## 详情请查看 Demo
