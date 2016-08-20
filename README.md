@@ -6,7 +6,6 @@
 2. MJExtension   (可删除可替换)
 
 ## MVC 的使用方法 
-#### 详情请看Demo
 
 Request
 ```
@@ -54,4 +53,9 @@ ViewController
 }
 ```
 ## RAC + MVVM 中的使用方法
+
+
+
+
+## 详情请查看 Demo
 
