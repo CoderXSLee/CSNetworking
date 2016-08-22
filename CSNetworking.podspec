@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
 s.name         = 'CSNetworking'
 s.summary      = 'On the basis of AFNetworking encapsulation.'
-s.version      = '1.0.8'
+s.version      = '1.0.9'
 s.license      = { :type => 'MIT', :file => 'LICENSE' }
 s.authors      = { 'CoderXSLee' => '1363852560@qq.com' }
 # s.social_media_url = 'http://'
