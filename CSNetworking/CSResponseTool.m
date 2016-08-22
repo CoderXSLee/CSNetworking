@@ -70,18 +70,15 @@
                 CSCommonResult *commonResult = [CSResponseTool requestError:response];
                 resultCode = commonResult.resultCode;
                 resultDesc = commonResult.resultDesc;
-            }else if (error.code == NSURLErrorNotConnectedToInternet ) {
+            }else if (error.code == NSURLErrorNotConnectedToInternet) {
                 resultDesc = @"无网络连接";
                 resultCode = CSNetworkError;
             }else if (error.code == NSURLErrorUnknown){
                 resultDesc = @"请求失败";
                 resultCode = CSNetworkError;
-            }else if(error.code == NSURLErrorNetworkConnectionLost) {
-                resultDesc = @"请求失败";
-                resultCode = CSNetworkError;
             }else {
                 resultDesc = @"请求失败";
-                resultCode = error.code;
+                resultCode = CSNetworkError;
             }
         }
         // 统一处理结果码以及描述

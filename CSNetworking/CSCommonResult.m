@@ -14,7 +14,7 @@
 {
     if (self = [super init])
     {
-        self.resultCode = CS_RESULT_SUCCESS;
+        self.resultCode = CS_RESULT_FAILURE;
         self.resultDesc = @"";
     }
     
