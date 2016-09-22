@@ -10,7 +10,7 @@
     //显示提示信息
     UIWindow *window = [[[UIApplication sharedApplication] windows] lastObject];
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:window animated:YES];
-    hud.userInteractionEnabled = YES;
+    hud.userInteractionEnabled = NO;
     // Configure for text only and offset down
     hud.color = UIColorFromSameRGBA(0, 0.7);
     hud.mode = MBProgressHUDModeText;
@@ -19,14 +19,14 @@
     hud.margin = 10.f;
     hud.yOffset = 100;
     hud.removeFromSuperViewOnHide = YES;
-    [hud hide:YES afterDelay:1.5];
+    [hud hide:YES afterDelay:1.8];
 }
 
 + (void)showHint:(NSString *)hint yOffset:(float)yOffset {
     //显示提示信息
     UIView *view = [[[UIApplication sharedApplication] windows] lastObject];
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
-    hud.userInteractionEnabled = YES;
+    hud.userInteractionEnabled = NO;
     // Configure for text only and offset down
     hud.color = UIColorFromSameRGBA(0, 0.7);
     hud.mode = MBProgressHUDModeText;
@@ -36,7 +36,7 @@
     hud.yOffset = 100;
     hud.yOffset += yOffset;
     hud.removeFromSuperViewOnHide = YES;
-    [hud hide:YES afterDelay:1.5];
+    [hud hide:YES afterDelay:1.8];
 }
 
 @end
