@@ -232,16 +232,16 @@ static NSString *baseURLString;
 
 - (void)setBaseURLString:(NSString *)urlString {
     NSURL *baseURL = [NSURL URLWithString:baseURLString];
-    _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:baseURL];
+    self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:baseURL];
 }
 - (void)setTimeoutInterval:(NSInteger)TimeoutInterval {
-    _sessionManager.requestSerializer.timeoutInterval = TimeoutInterval;
+    self.sessionManager.requestSerializer.timeoutInterval = TimeoutInterval;
 }
 - (void)setHeaderValue:(NSString *)value forKey:(NSString *)key {
-    [_sessionManager.requestSerializer setValue:value forHTTPHeaderField:key];
+    [self.sessionManager.requestSerializer setValue:value forHTTPHeaderField:key];
 }
 - (void)AcceptableContentTypes:(NSSet *)acceptableContentTypes {
-    [_sessionManager.responseSerializer setAcceptableContentTypes:acceptableContentTypes];
+    [self.sessionManager.responseSerializer setAcceptableContentTypes:acceptableContentTypes];
 }
 
 
