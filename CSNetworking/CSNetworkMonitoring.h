@@ -54,7 +54,7 @@ typedef NS_ENUM(NSInteger, CSNetworkStatus) {
 /**
  *  单利方法的实现
  */
-@interface CSNetworkMonitoring (Category)
+@interface CSNetworkMonitoring ()
 
 sharedInstanceH
 

@@ -27,8 +27,21 @@ NSString * const _kCSNoneNetworkString                =       @"无网络连接"
 
 @implementation CSNetworkMonitoring
 
+sharedInstanceM
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+}
+
+- (Reachability *)reachabilityManager {
+    if (_reachabilityManager == nil) {
+        _reachabilityManager = [Reachability reachabilityWithHostName:@"www.baidu.com"];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(reachabilityChanged:)
+                                                     name:kReachabilityChangedNotification
+                                                   object:nil];
+    }
+    return _reachabilityManager;
 }
 
 // 开始监听网络状态
@@ -117,27 +130,6 @@ NSString * const _kCSNoneNetworkString                =       @"无网络连接"
     }else if (status == ReachableViaWiFi){
         [CSTip showHint:@"已切换WiFi网络"];
     }
-}
-
-@end
-
-
-/**
- *  单利方法的实现
- */
-@implementation CSNetworkMonitoring (Category)
-
-sharedInstanceM
-
-- (Reachability *)reachabilityManager {
-    if (_reachabilityManager == nil) {
-        _reachabilityManager = [Reachability reachabilityWithHostName:@"www.baidu.com"];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(reachabilityChanged:)
-                                                     name:kReachabilityChangedNotification
-                                                   object:nil];
-    }
-    return _reachabilityManager;
 }
 
 @end
