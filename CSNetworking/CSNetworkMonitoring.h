@@ -21,6 +21,8 @@ typedef NS_ENUM(NSInteger, CSNetworkStatus) {
 
 @interface CSNetworkMonitoring : NSObject
 
+sharedInstanceH
+
 /**
  *  启动网络监听
  */
@@ -46,16 +48,5 @@ typedef NS_ENUM(NSInteger, CSNetworkStatus) {
  *  @return 返回网络的状态描述 为崩溃上报
  */
 //- (NSString *)getNetworkStatusDescriptionForExceptionCache;
-
-@end
-
-
-
-/**
- *  单利方法的实现
- */
-@interface CSNetworkMonitoring ()
-
-sharedInstanceH
 
 @end
