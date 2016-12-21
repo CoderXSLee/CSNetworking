@@ -50,6 +50,9 @@
         commonResult.resultCode = [response[@"code"] integerValue];
         // commonResult.resultDesc = response[@"msg"];
         commonResult.resultDesc = response[@"error"];
+    }else {
+        commonResult.resultCode = -100;
+        commonResult.resultDesc = @"服务器异常, 请稍后再试";
     }
     return commonResult;
 }
