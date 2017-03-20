@@ -28,6 +28,9 @@ networkBlock:(NetworkBlock)networkBlock;
 + (void)POST:(NSString *)urlString parameters:(NSDictionary *)parameters isCache:(BOOL)isCache
 networkBlock:(NetworkBlock)networkBlock;
 
+/// 上传文件post请求
++ (void)POST:(NSString *)urlString parameters:(NSDictionary *)parameters data:(NSData *)data name:(NSString *)name fileName:(NSString *)fileName mimeType:(NSString *)mimeType networkBlock:(NetworkBlock)networkBlock;
+
 /// PUT 请求
 + (void)PUT:(NSString *)urlString parameters:(NSDictionary *)parameters isCache:(BOOL)isCache
 networkBlock:(NetworkBlock)networkBlock;

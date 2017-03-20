@@ -106,6 +106,28 @@ static NSString *baseURLString;
     
 }
 
+/// 上传文件 POST请求
++ (void)POST:(NSString *)urlString parameters:(NSDictionary *)parameters data:(NSData *)data name:(NSString *)name fileName:(NSString *)fileName mimeType:(NSString *)mimeType networkBlock:(NetworkBlock)networkBlock {
+    
+    CSNetworking *networking = [CSNetworking sharedInstance];
+    [networking.sessionManager POST:urlString parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        
+        [formData appendPartWithFileData:data name:name fileName:fileName mimeType:mimeType];
+        
+    } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSLog(@"接口: %@%@ 以【POST】上传方式->请求成功!", baseURLString, urlString);
+        [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        NSLog(@"接口: %@%@ 以【POST】上传方式->请求失败!", baseURLString, urlString);
+        NSLog(@"parameters = %@", parameters);
+        [CSNetworking failureWithBlock:networkBlock error:error];
+        
+    }];
+}
+
 /// PUT 请求
 + (void)PUT:(NSString *)urlString parameters:(NSDictionary *)parameters isCache:(BOOL)isCache networkBlock:(NetworkBlock)networkBlock {
     
