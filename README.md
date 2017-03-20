@@ -8,7 +8,7 @@
    
 
 ## CocoaPods 安装
-pod 'CSNetworking', '~> 1.0.0'
+pod 'CSNetworking'
   
     
     
