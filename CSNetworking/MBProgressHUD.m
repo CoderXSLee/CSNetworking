@@ -170,7 +170,7 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 		self.mode = MBProgressHUDModeIndeterminate;
 		self.labelText = nil;
 		self.detailsLabelText = nil;
-		self.opacity = 0.8f;
+		self.opacity = 0.45f;
 		self.color = nil;
 		self.labelFont = [UIFont boldSystemFontOfSize:kLabelFontSize];
 		self.labelColor = [UIColor whiteColor];
@@ -180,8 +180,8 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 		self.xOffset = 0.0f;
 		self.yOffset = 0.0f;
 		self.dimBackground = NO;
-		self.margin = 20.0f;
-		self.cornerRadius = 10.0f;
+		self.margin = 10.0f;
+		self.cornerRadius = 4;
 		self.graceTime = 0.0f;
 		self.minShowTime = 0.0f;
 		self.removeFromSuperViewOnHide = NO;
@@ -534,7 +534,7 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 	CGRect bounds = self.bounds;
 	
 	// Determine the total width and height needed
-	CGFloat maxWidth = bounds.size.width - 4 * margin;
+	CGFloat maxWidth = bounds.size.width - 8 * margin;
 	CGSize totalSize = CGSizeZero;
 	
 	CGRect indicatorF = indicator.bounds;
@@ -559,7 +559,7 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 		totalSize.height += kPadding;
 	}
 	
-	totalSize.width += 2 * margin;
+	totalSize.width += 6 * margin;
 	totalSize.height += 2 * margin;
 	
 	// Position elements
@@ -592,7 +592,7 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 	// Enforce minsize and quare rules
 	if (square) {
 		CGFloat max = MAX(totalSize.width, totalSize.height);
-		if (max <= bounds.size.width - 2 * margin) {
+		if (max <= bounds.size.width - 6 * margin) {
 			totalSize.width = max;
 		}
 		if (max <= bounds.size.height - 2 * margin) {

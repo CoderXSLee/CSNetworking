@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "CSNetworking.h"
+#import "CSTip.h"
 
 @interface ViewController ()
 
@@ -65,6 +66,12 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [super touchesBegan:touches withEvent:event];
+    
+    [CSTip showHint:@"阿里斯顿发了几"];
 }
 
 @end
