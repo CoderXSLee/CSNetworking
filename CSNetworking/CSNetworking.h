@@ -43,6 +43,7 @@ networkBlock:(NetworkBlock)networkBlock;
 - (void)setTimeoutInterval:(NSInteger)TimeoutInterval;
 - (void)setHeaderValue:(NSString *)value forKey:(NSString *)key;
 - (void)AcceptableContentTypes:(NSSet *)acceptableContentTypes;
+- (void)addParameterValue:(id)value forKey:(NSString *)key;
 
 @end
 

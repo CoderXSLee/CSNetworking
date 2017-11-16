@@ -15,6 +15,7 @@
 
 @interface CSNetworking ()
 
+@property (nonatomic, strong) NSMutableDictionary *parame;
 @property (nonatomic, strong) AFHTTPSessionManager *sessionManager;
 
 @end
@@ -38,11 +39,11 @@ static NSString *baseURLString;
 /// 适用于奇葩传参方式 例如: www.baidu.com/getUserAddressList/1207 (1207为UID)
 + (void)GET:(NSString *)urlString isCache:(BOOL)isCache networkBlock:(NetworkBlock)networkBlock {
     
+    CSNetworking *networking = [CSNetworking sharedInstance];
     // 判断网络状态 ，无网络有缓存则取缓存数据。
     [CSNetworking isCache:isCache url:urlString parame:nil networkBlock:networkBlock];
     
     /// 不缓存，有网络才会来这里
-    CSNetworking *networking = [CSNetworking sharedInstance];
     [networking.sessionManager GET:urlString parameters:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSLog(@"接口: %@%@ 以【GET】方式->请求成功!", baseURLString, urlString);
@@ -61,12 +62,14 @@ static NSString *baseURLString;
 
 /// 适用于 REST URI 例如: www.baidu.com/getUserAddressList/?userID=1207
 + (void)GET:(NSString *)urlString parameters:(NSDictionary *)parameters isCache:(BOOL)isCache networkBlock:(NetworkBlock)networkBlock {
-    // 判断网络状态 ，无网络有缓存则取缓存数据。
-    [CSNetworking isCache:isCache url:urlString parame:parameters networkBlock:networkBlock];
     
-    /// 不缓存，有网络才会来这里
     CSNetworking *networking = [CSNetworking sharedInstance];
-    [networking.sessionManager GET:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    NSMutableDictionary *parame = [NSMutableDictionary dictionaryWithDictionary:parameters];
+    [parame addEntriesFromDictionary:networking.parame];
+    // 判断网络状态 ，无网络有缓存则取缓存数据。
+    [CSNetworking isCache:isCache url:urlString parame:parame networkBlock:networkBlock];
+    /// 不缓存，有网络才会来这里
+    [networking.sessionManager GET:urlString parameters:parame progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSLog(@"接口: %@%@ 以【GET URI】方式->请求成功!", baseURLString, urlString);
         [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
@@ -84,12 +87,15 @@ static NSString *baseURLString;
 /// POST 请求
 + (void)POST:(NSString *)urlString parameters:(NSDictionary *)parameters isCache:(BOOL)isCache networkBlock:(NetworkBlock)networkBlock {
     
+    CSNetworking *networking = [CSNetworking sharedInstance];
+    NSMutableDictionary *parame = [NSMutableDictionary dictionaryWithDictionary:parameters];
+    [parame addEntriesFromDictionary:networking.parame];
+    
     // 判断网络状态 ，无网络有缓存则取缓存数据。
-    [CSNetworking isCache:isCache url:urlString parame:parameters networkBlock:networkBlock];
+    [CSNetworking isCache:isCache url:urlString parame:parame networkBlock:networkBlock];
     
     /// 不缓存，有网络才会来这里
-    CSNetworking *networking = [CSNetworking sharedInstance];
-    [networking.sessionManager POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [networking.sessionManager POST:urlString parameters:parame progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSLog(@"接口: %@%@ 以【POST】方式->请求成功!", baseURLString, urlString);
         [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
@@ -110,7 +116,10 @@ static NSString *baseURLString;
 + (void)POST:(NSString *)urlString parameters:(NSDictionary *)parameters data:(NSData *)data name:(NSString *)name fileName:(NSString *)fileName mimeType:(NSString *)mimeType networkBlock:(NetworkBlock)networkBlock {
     
     CSNetworking *networking = [CSNetworking sharedInstance];
-    [networking.sessionManager POST:urlString parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    NSMutableDictionary *parame = [NSMutableDictionary dictionaryWithDictionary:parameters];
+    [parame addEntriesFromDictionary:networking.parame];
+    
+    [networking.sessionManager POST:urlString parameters:parame constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
         [formData appendPartWithFileData:data name:name fileName:fileName mimeType:mimeType];
         
@@ -131,12 +140,15 @@ static NSString *baseURLString;
 /// PUT 请求
 + (void)PUT:(NSString *)urlString parameters:(NSDictionary *)parameters isCache:(BOOL)isCache networkBlock:(NetworkBlock)networkBlock {
     
+    CSNetworking *networking = [CSNetworking sharedInstance];
+    NSMutableDictionary *parame = [NSMutableDictionary dictionaryWithDictionary:parameters];
+    [parame addEntriesFromDictionary:networking.parame];
+    
     // 判断网络状态 ，无网络有缓存则取缓存数据。
-    [CSNetworking isCache:isCache url:urlString parame:parameters networkBlock:networkBlock];
+    [CSNetworking isCache:isCache url:urlString parame:parame networkBlock:networkBlock];
     
     /// 不缓存，有网络才会来这里
-    CSNetworking *networking = [CSNetworking sharedInstance];
-    [networking.sessionManager PUT:urlString parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+    [networking.sessionManager PUT:urlString parameters:parame success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSLog(@"接口: %@%@【PUT】方式->请求成功!", baseURLString, urlString);
         [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
@@ -156,7 +168,10 @@ static NSString *baseURLString;
 + (void)DELETE:(NSString *)urlString parameters:(NSDictionary *)parameters networkBlock:(NetworkBlock)networkBlock {
     
     CSNetworking *networking = [CSNetworking sharedInstance];
-    [networking.sessionManager DELETE:urlString parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+    NSMutableDictionary *parame = [NSMutableDictionary dictionaryWithDictionary:parameters];
+    [parame addEntriesFromDictionary:networking.parame];
+    
+    [networking.sessionManager DELETE:urlString parameters:parame success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSLog(@"接口: %@%@ 以【DELETE】方式->请求成功!", baseURLString, urlString);
         [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
@@ -226,8 +241,8 @@ static NSString *baseURLString;
         
         _sessionManager = [AFHTTPSessionManager manager];
         
-//        NSURL *baseURL = [NSURL URLWithString:baseURLString];
-//        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:baseURL];
+        //        NSURL *baseURL = [NSURL URLWithString:baseURLString];
+        //        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:baseURL];
         
         // 设定请求超时 (若不设置 则 默认 60 秒)
         _sessionManager.requestSerializer.timeoutInterval = 30;
@@ -265,7 +280,10 @@ static NSString *baseURLString;
 - (void)AcceptableContentTypes:(NSSet *)acceptableContentTypes {
     [self.sessionManager.responseSerializer setAcceptableContentTypes:acceptableContentTypes];
 }
-
+- (void)addParameterValue:(id)value forKey:(NSString *)key {
+    if (_parame == nil) { _parame = [NSMutableDictionary dictionary]; }
+    [_parame setValue:value forKey:key];
+}
 
 @end
 
@@ -273,3 +291,4 @@ static NSString *baseURLString;
 @implementation CSNetworking (Singleton)
 sharedInstanceM
 @end
+
