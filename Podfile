@@ -1,5 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, "7.0"
+platform :ios, "9.0"
 
 pod "AFNetworking"#, '~>3.1.0'
 pod "MJExtension"#, '~>3.0.13'
