@@ -44,16 +44,13 @@ static NSString *baseURLString;
     [CSNetworking isCache:isCache url:urlString parame:nil networkBlock:networkBlock];
     
     /// 不缓存，有网络才会来这里
-    [networking.sessionManager GET:urlString parameters:nil progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        
+    [networking.sessionManager GET:urlString parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"接口: %@%@ 以【GET】方式->请求成功!", baseURLString, urlString);
         [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
         
         // 请求成功判断是否进行缓存数据
         [CSNetworking isCache:isCache cacheDataWithUrl:urlString response:responseObject];
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"接口: %@%@ 以【GET】方式->请求失败!", baseURLString, urlString);
         NSLog(@"parameters 在 url后面");
         [CSNetworking failureWithBlock:networkBlock error:error];
@@ -69,15 +66,12 @@ static NSString *baseURLString;
     // 判断网络状态 ，无网络有缓存则取缓存数据。
     [CSNetworking isCache:isCache url:urlString parame:parame networkBlock:networkBlock];
     /// 不缓存，有网络才会来这里
-    [networking.sessionManager GET:urlString parameters:parame progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        
+    [networking.sessionManager GET:urlString parameters:parame headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"接口: %@%@ 以【GET URI】方式->请求成功!", baseURLString, urlString);
         [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
         // 请求成功判断是否进行缓存数据
         [CSNetworking isCache:isCache cacheDataWithUrl:urlString response:responseObject];
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"接口: %@%@ 以【GET URI】方式->请求失败!", baseURLString, urlString);
         NSLog(@"parameters = %@", parameters);
         [CSNetworking failureWithBlock:networkBlock error:error];
@@ -95,7 +89,7 @@ static NSString *baseURLString;
     [CSNetworking isCache:isCache url:urlString parame:parame networkBlock:networkBlock];
     
     /// 不缓存，有网络才会来这里
-    [networking.sessionManager POST:urlString parameters:parame progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [networking.sessionManager POST:urlString parameters:parame headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSLog(@"接口: %@%@ 以【POST】方式->请求成功!", baseURLString, urlString);
         [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
@@ -103,11 +97,12 @@ static NSString *baseURLString;
         // 请求成功判断是否进行缓存数据
         [CSNetworking isCache:isCache cacheDataWithUrl:urlString response:responseObject];
         
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
         NSLog(@"接口: %@%@ 以【POST】方式->请求失败!", baseURLString, urlString);
         NSLog(@"parameters = %@", parameters);
         [CSNetworking failureWithBlock:networkBlock error:error];
+        
     }];
     
 }
@@ -119,7 +114,7 @@ static NSString *baseURLString;
     NSMutableDictionary *parame = [NSMutableDictionary dictionaryWithDictionary:parameters];
     [parame addEntriesFromDictionary:networking.parame];
     
-    [networking.sessionManager POST:urlString parameters:parame constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    [networking.sessionManager POST:urlString parameters:parame headers:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
         [formData appendPartWithFileData:data name:name fileName:fileName mimeType:mimeType];
         
@@ -133,7 +128,6 @@ static NSString *baseURLString;
         NSLog(@"接口: %@%@ 以【POST】上传方式->请求失败!", baseURLString, urlString);
         NSLog(@"parameters = %@", parameters);
         [CSNetworking failureWithBlock:networkBlock error:error];
-        
     }];
 }
 
@@ -148,7 +142,7 @@ static NSString *baseURLString;
     [CSNetworking isCache:isCache url:urlString parame:parame networkBlock:networkBlock];
     
     /// 不缓存，有网络才会来这里
-    [networking.sessionManager PUT:urlString parameters:parame success:^(NSURLSessionDataTask *task, id responseObject) {
+    [networking.sessionManager PUT:urlString parameters:parame headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSLog(@"接口: %@%@【PUT】方式->请求成功!", baseURLString, urlString);
         [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
@@ -156,12 +150,13 @@ static NSString *baseURLString;
         // 请求成功判断是否进行缓存数据
         [CSNetworking isCache:isCache cacheDataWithUrl:urlString response:responseObject];
         
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
         NSLog(@"接口: %@%@ 以【PUT】方式->请求失败!", baseURLString, urlString);
         NSLog(@"parameters = %@", parameters);
         [CSNetworking failureWithBlock:networkBlock error:error];
     }];
+    
 }
 
 /// DELETE 请求
@@ -170,13 +165,13 @@ static NSString *baseURLString;
     CSNetworking *networking = [CSNetworking sharedInstance];
     NSMutableDictionary *parame = [NSMutableDictionary dictionaryWithDictionary:parameters];
     [parame addEntriesFromDictionary:networking.parame];
-    
-    [networking.sessionManager DELETE:urlString parameters:parame success:^(NSURLSessionDataTask *task, id responseObject) {
+
+    [networking.sessionManager DELETE:urlString parameters:parame headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSLog(@"接口: %@%@ 以【DELETE】方式->请求成功!", baseURLString, urlString);
         [CSNetworking cuccessWithBlock:networkBlock response:responseObject];
         
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
         NSLog(@"接口: %@%@ 以【DELETE】方式->请求失败!", baseURLString, urlString);
         NSLog(@"parameters = %@", parameters);
